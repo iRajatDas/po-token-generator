@@ -1,27 +1,24 @@
+import puppeteer, { PuppeteerExtra } from "puppeteer-extra";
+import stealthPlugin from "puppeteer-extra-plugin-stealth";
+import adblockerPlugin from "puppeteer-extra-plugin-adblocker";
 import { Browser, Page, PuppeteerLaunchOptions } from "puppeteer";
-import { PuppeteerExtra } from "puppeteer-extra";
 import NodeCache from "node-cache";
 import logger from "./logger";
 import os from "os";
 import { Config, ScrapeResult } from "./types";
 
 let browserPromise: Promise<Browser> | null = null;
-let puppeteer: PuppeteerExtra | null = null;
+
+// Explicitly type puppeteer as PuppeteerExtra
+const puppeteerExtra: PuppeteerExtra = puppeteer;
 
 function initializePuppeteer(config: Config): void {
-  if (!puppeteer) {
-    puppeteer = require("puppeteer-extra") as PuppeteerExtra;
-    const stealthPlugin = require("puppeteer-extra-plugin-stealth")();
-    puppeteer.use(stealthPlugin);
+  puppeteerExtra.use(stealthPlugin());
 
-    if (config.adblockerPlugin !== false) {
-      const adblockerPlugin = require("puppeteer-extra-plugin-adblocker");
-      puppeteer.use(
-        adblockerPlugin(
-          config.adblockerPluginOptions || { blockTrackers: true }
-        )
-      );
-    }
+  if (config.adblockerPlugin !== false) {
+    puppeteerExtra.use(
+      adblockerPlugin(config.adblockerPluginOptions || { blockTrackers: true })
+    );
   }
 }
 

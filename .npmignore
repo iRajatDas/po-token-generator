@@ -5,9 +5,14 @@ __tests__/
 # Exclude config files
 rollup.config.js
 tsconfig.json
+tsup.config.ts
 jest.config.js
 jest-puppeteer.config.js
 
 # Exclude logs and local environment files
 *.log
 .env
+
+# MacOS
+.DS_Store
+node_modules

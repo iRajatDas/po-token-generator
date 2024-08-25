@@ -1,32 +1,56 @@
+import typescript from "@rollup/plugin-typescript";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import typescript from "@rollup/plugin-typescript";
 import json from "@rollup/plugin-json";
-import terser from "@rollup/plugin-terser";
-import pkg from "./package.json" assert { type: "json" };
+import dts from "rollup-plugin-dts";
+
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+import { readFileSync } from "fs";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const packageJson = JSON.parse(
+  readFileSync(join(__dirname, "package.json"), "utf8")
+);
 
 export default [
   {
     input: "src/index.ts",
     output: [
       {
-        file: "dist/index.cjs.js",
-        format: "cjs",
+        file: packageJson.module,
+        format: "es",
         sourcemap: true,
       },
       {
-        file: "dist/index.esm.js",
-        format: "esm",
+        file: packageJson.exports["."].require,
+        format: "cjs",
         sourcemap: true,
       },
     ],
     plugins: [
-      resolve(),
+      resolve({
+        preferBuiltins: true,
+        browser: true,
+      }),
       commonjs(),
       json(),
       typescript({ tsconfig: "./tsconfig.json" }),
-      terser(),
     ],
-    external: [...Object.keys(pkg.dependencies || {})],
+    external: [
+      "winston",
+      "node-cache",
+      "puppeteer",
+      "puppeteer-extra",
+      "puppeteer-extra-plugin-stealth",
+      "puppeteer-extra-plugin-adblocker",
+    ],
+  },
+  {
+    input: "dist/types/index.d.ts",
+    output: [{ file: packageJson.types, format: "es" }],
+    plugins: [dts()],
   },
 ];
