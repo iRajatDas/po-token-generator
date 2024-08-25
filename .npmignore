@@ -1,0 +1,13 @@
+# Exclude source files
+src/
+__tests__/
+
+# Exclude config files
+rollup.config.js
+tsconfig.json
+jest.config.js
+jest-puppeteer.config.js
+
+# Exclude logs and local environment files
+*.log
+.env
