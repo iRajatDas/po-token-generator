@@ -34,7 +34,7 @@ pnpm add po-token-generator
 Here’s how to use `po-token-generator` to scrape YouTube video data:
 
 ```typescript
-import { scrapeYouTubeData } from "po_token-generator";
+import { scrapeYouTubeData } from "po-token-generator";
 
 const videoId = "CEARgJ74WPU";
 
@@ -53,7 +53,7 @@ const videoId = "CEARgJ74WPU";
 The `scrapeYouTubeData` function is highly configurable. Here’s an example using advanced options:
 
 ```typescript
-import { scrapeYouTubeData, Config } from "po_token-generator";
+import { scrapeYouTubeData, Config } from "po-token-generator";
 
 const config: Config = {
   headless: true,
